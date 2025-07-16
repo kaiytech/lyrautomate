@@ -1,3 +1,25 @@
+# Lyra Automation - Learning experience
+
+## Table of contents
+1. Introduction
+
+## Introduction
+This is a Test Automation project guided at learning on how to use [GameDriver](https://www.gamedriver.io/) with UnrealEngine 5. I have a few years of experience with AltTester and Unity, so giving this task a go should not be too hard. The code included in this repository represents only the automation project, but all changes to the game are listed below. This is based on the [UE5 Lyra example game](https://dev.epicgames.com/documentation/en-us/unreal-engine/lyra-sample-game-in-unreal-engine).
+
+## Automated tests project
+The Automated Tests project (LyrAutomate) consists of a few files:
+- `Tests.cs` - all unit tests are defined here
+- `Automation/Lyra.cs` - static locators for Lyra game objects
+- `Automation/Wait.cs` - custom helper function to synchronously await on conditions
+- `Extensions/Vector3Extensions.cs` - two handy Vector3 extensions
+
+### Tests
+All tests are defined in a `Tests.cs` file, and they are designed using NUnit. In some places a library FluentAssertions is used, to make the code look a bit nicer.
+
+#### Movement test
+tbd
+
+
 ```
 Adding a bot...
 Teleporting bot and player to each other.
