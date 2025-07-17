@@ -11,7 +11,7 @@
 8. --Other classes
 9. ---Wait
 10. ---Vector3Extensions
-11. Lyra code additions
+11. Lyra Project Modifications
 12. -LyraPlayerController.h
 13. -LyraPlayerController.cpp
 14. GameDriver experience conclusions
@@ -179,7 +179,7 @@ What's funny, is that only NOW I have noticed that GameDriver natively supports 
 Because the `gdio.common.objects`'s `Vector3` is only a very basic implementation, I had to add two helper methods: `Add` that lets you add or substract vectors from each other, and a `InRangeOf` method that compares two vectors with a specified acceptable range. I would love to add custom operators instead (so I could do `vector*vector`) but C# does not support this with class extensions. This could've been done by creating a new custom Vector3 class though (with custom casts to the native Vector3), but that would complicate code a bit too much.
 
 
-# Lyra code additions
+# Lyra Project Modifications
 ## LyraPlayerController.h
 ALyraPlayerController:
 ```cpp
@@ -289,6 +289,14 @@ void ALyraPlayerController::AimAtActorProgressive()
 	SetControlRotation(NewControlRot);
 }
 ```
+
+This approach implements a progressive aiming helper within a custom `ALyraPlayerController` class, designed to gradually rotate the player’s control rotation toward a specified `AActor` target over multiple ticks. The core functionality is encapsulated in the `AimAtActorProgressive` function and referenced in the `Tick` function, producing smooth and frame rate independent mouse movements.
+
+When `AimAtActor` is called, the controller caches the target actor and the scale factor. During each Tick, if a target is present, `AimAtActorProgressive` calculates the desired rotation from the player camera’s current location to the target's world position. The rotational delta between the current control rotation and the desired look-at rotation is computed, normalized, and mapped to a 2D vector representing pitch and yaw deltas. These values are scaled by AimScale to produce incremental adjustments, which are then applied to the control rotation. This method ensures a natural, non-instantaneous aiming transition that avoids abrupt snapping and look like analog input behavior.
+
+Once the delta is within a tolerance (`0.05f`, adjust if needed? Seemed like the best value), the system considers the alignment complete and clears the target, so the rotation will not happen anymore. The IsAiming flag provides feedback for GameDriver to query aiming state.
+
+This system is lightweight, deterministic, and suitable for single-player or local simulation, but requires extension (e.g., network replication or prediction) for multiplayer environments.
 
 # GameDriver experience conclusions
 As a person who has years of experience using AltTester for Unity, I can immediately see a few pros and cons about GameDriver, judging by my current experience with it. 
