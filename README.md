@@ -183,6 +183,11 @@ Because the `gdio.common.objects`'s `Vector3` is only a very basic implementatio
 ## LyraPlayerController.h
 ALyraPlayerController:
 ```cpp
+public:
+  virtual void Tick(float DeltaSeconds) override;
+
+// [...]
+
 private:
   UFUNCTION()
   void AimAtActorProgressive();
@@ -219,7 +224,7 @@ ALyraPlayerController::ALyraPlayerController(const FObjectInitializer& ObjectIni
 
 // [...]
 
-void ALyraPlayerController::PlayerTick(float DeltaTime)
+void ALyraPlayerController::Tick(float DeltaTime)
 {
   // [...]
   if (TargetActor)
@@ -258,22 +263,6 @@ void ALyraPlayerController::AimAtActorTemp(float scale)
 	{
 		this->AimAtActor(LastMatch, scale);
 		this->IsAiming = true;
-	}
-}
-
-void ALyraPlayerController::Tick(float DeltaSeconds)
-{
-
-	Super::Tick(DeltaSeconds);
-
-	if (TargetActor)
-	{
-		AimAtActorProgressive();
-		this->IsAiming = true;
-	}
-	else
-	{
-		this->IsAiming = false;
 	}
 }
 
