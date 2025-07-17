@@ -303,7 +303,7 @@ void ALyraPlayerController::AimAtActorProgressive()
 
 # GameDriver experience conclusions
 As a person who has years of experience using AltTester for Unity, I can immediately see a few pros and cons about GameDriver, judging by my current experience with it. 
-## What I liked.
+## What I liked
 - It's awesome it works for both Unity and Unreal (even though I got to test only in UE).
 - Easy to connect to, works in the editor.
 - You can enter and exit play mode natively.
