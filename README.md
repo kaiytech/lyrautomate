@@ -319,6 +319,7 @@ As a person who has years of experience using AltTester for Unity, I can immedia
 - (presumably) doesn't support referencing AActor* with LiteGameObjects. And if it does, it's not documented and I never got it to work properly.
 - Performance. The game stutters a lot on GameDriver requests.
 - No obvious way of waiting for objects to disappear.
+- Inconsistent input handling. Also the Click() function messes a LOT with the editor if you accidentaly move your mouse while a test is running. Layout goes all over the place, yuck!
 
 I still enjoyed using it - in most cases it was straightforward on how to achieve stuff without looking up documentation, but when it wasn't as easy then the lacking documentation was a bit of a problem. I think it's a great tool but not production-ready in an as-is form. It could be a good base for a much more powerful wrapper that supports better logging, better exception handling, connection support and adds a few missing features. I have done all of that using a trial version of the software and I do not plan on acquiring a full license for it.
 
