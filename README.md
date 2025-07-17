@@ -14,6 +14,8 @@
 11. Lyra code additions
 12. -LyraPlayerController.h
 13. -LyraPlayerController.cpp
+14. GameDriver experience conclusions
+15. References
 
 # Introduction
 This is a Test Automation project guided at learning on how to use [GameDriver](https://www.gamedriver.io/) with UnrealEngine 5. I have a few years of experience with AltTester and Unity, so giving this task a go should not be too hard. The code included in this repository represents only the automation project, but all changes to the game are listed below. This is based on the [UE5 Lyra example game](https://dev.epicgames.com/documentation/en-us/unreal-engine/lyra-sample-game-in-unreal-engine).
@@ -32,6 +34,7 @@ All tests are defined in a `Tests.cs` file, and they are designed using NUnit. I
 There is a one-time setup for these tests. It stops the editor play mode (if possible), then starts it again, loads a specific level, kicks all bots and waits for 2 seconds (just in case). Because GameDriver doesn't let you check whether we're in the editor mode (and because GameDriver lacks proper exception handling, more on that later), I had to wrap it inside a dummy try/catch block. My approach loads the game normally (as if you loaded it yourself) and then deletes the bots. A good approach would also be to have our own gamemode that inherits from this one, and make it NOT spawn bots at all, but I opted for this approach to avoid modifying the game code too much.
 
 ### Movement test
+![video](movementtest.gif)
 This simple test is designed to test the character movement. The test teleports the player to a pre-set position and performs a movement in 4 different directions. These directions are labeled as 'left', 'right', 'backwards' and 'forwards', although the starting rotation of the player may have an impact if these labels correspond to actual directions (as they are pre-set coordinates). For each direction, the test awaits until the player reaches the desired coordinate (within a `50u` acceptable range)
 
 ```gherkin
@@ -65,6 +68,7 @@ Successfully moved forwards!
 
 
 ### Weapon test
+![video](weapontest.gif)
 This automated test is designed to test basic weapon features. Simulating input has been challenging, but apparently focusing the editor seems to work in most cases - in this case GameDriver seems very unreliable, but I'm happy to have taken a screen recording of the test working as expected. I had to loop the reload action until the result is achieved, because the game did not always record the key press. For the purpose of this test, I have created a PlayerInventory struct that returns the entire player's inventory. In some cases this could potentially slow down tests (because the amount of requests would increase, if we only cared about one value), but in my case it was a nice trade off for an easier to maintain code. 
 
 
@@ -120,6 +124,7 @@ After waiting for 5.4055514s, Respawn Timer Visible is False.
 ```
 
 ### Aim test
+![video](aimtest.gif)
 This test is designed to showcase the aim helper method implemented (by me) in the game. The method takes over the input system and moves the camera towards the target (more on that later).
 However, GameDriver doesn't let me push pointers to game objects with requests, so despite a proper method existing, I had to create a temporary helper method to workaround this issue and showcase "what would have been". So again, in an ideal world, this line:
 
@@ -166,6 +171,8 @@ Wait.Until(() => <T>SomeMethod(), "Some Method").Is(<T>result, timeoutSeconds: 1
 It repeatedly performs `SomeMethod()` until its result is not `result`. After a timeout of `120` seconds is hit and the condition is not met, an exception is thrown.
 I added a 100ms sleep in between checks, just to not overwhelm GameDriver too much. Usually this sleep wouldn't be there, or would be customisable.
 The reason I like the `Wait` approach is because this eliminates the unnecessary hardcoded sleeps that could break the test if the game for some reason takes a bit longer to perform some action. We can also set timeouts. If something happens eventually after 120 seconds (when it should take only 10), it's still a valid reason to fail an automated test. Also, awaiting stuff often makes automated tests happen way quicker. 
+
+What's funny, is that only NOW I have noticed that GameDriver natively supports waiting for values T_T. Well, at least we have great logs for this now.
 
 
 ### Vector3Extensions
@@ -294,3 +301,26 @@ void ALyraPlayerController::AimAtActorProgressive()
 }
 ```
 
+# GameDriver experience conclusions
+As a person who has years of experience using AltTester for Unity, I can immediately see a few pros and cons about GameDriver, judging by my current experience with it. 
+## What I liked.
+- It's awesome it works for both Unity and Unreal (even though I got to test only in UE).
+- Easy to connect to, works in the editor.
+- You can enter and exit play mode natively.
+- Native support for console commands.
+- Raycasting support.
+
+## What I didn't like
+- GameDriver uses outdated MSVC compilers and it's not documented properly, so getting past the first configuration was very tricky and time consuming.
+- Exception handling. Everything is just a regular 'System.Exception' - hard to catch unerlying errors and act accordingly.
+- The in-game UI for states and objects is handy but very laggy and updates inconsistently.
+- I would prefer a more OOP approach for fetched objects. It would be cool if you could first find and object and then do .GetFieldValue() on it.
+- Terrible documentation! Outdated and doesn't explain many features.
+- (presumably) doesn't support referencing AActor* with LiteGameObjects. And if it does, it's not documented and I never got it to work properly.
+- Performance. The game stutters a lot on GameDriver requests.
+- No obvious way of waiting for objects to disappear.
+
+I still enjoyed using it - in most cases it was straightforward on how to achieve stuff without looking up documentation, but when it wasn't as easy then the lacking documentation was a bit of a problem. I think it's a great tool but not production-ready in an as-is form. It could be a good base for a much more powerful wrapper that supports better logging, better exception handling, connection support and adds a few missing features. I have done all of that using a trial version of the software and I do not plan on acquiring a full license for it.
+
+# References
+- Full test video: [here](https://drive.google.com/file/d/1P3xOje3Ktb1J9b9K76wremKJFdynPEJk/view?usp=drive_link)
