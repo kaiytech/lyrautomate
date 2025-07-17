@@ -2,6 +2,8 @@
 
 # Table of contents
 1. Introduction
+2. Automated Tests project
+3. 	Tests
 
 # Introduction
 This is a Test Automation project guided at learning on how to use [GameDriver](https://www.gamedriver.io/) with UnrealEngine 5. I have a few years of experience with AltTester and Unity, so giving this task a go should not be too hard. The code included in this repository represents only the automation project, but all changes to the game are listed below. This is based on the [UE5 Lyra example game](https://dev.epicgames.com/documentation/en-us/unreal-engine/lyra-sample-game-in-unreal-engine).
