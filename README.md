@@ -1,4 +1,4 @@
-# Lyra Automation - Learning experience
+# Lyra Automation - GameDriver learning experience
 
 # Table of contents
 1. Introduction
