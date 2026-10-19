@@ -1,4 +1,4 @@
-[![Human-Made](https://img.shields.io/badge/made%20by-a%20human-blue?style=flat-square)](https://github.com/your-username/your-repo)
+![Human-Made](https://img.shields.io/badge/made%20by-a%20human-blue?style=flat-square)
 # Lyra Automation - GameDriver learning experience
 
 # Table of contents
